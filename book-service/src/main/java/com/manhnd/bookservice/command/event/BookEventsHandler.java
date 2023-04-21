@@ -20,4 +20,19 @@ public class BookEventsHandler {
 		BeanUtils.copyProperties(event, book);
 		bookRepository.save(book);
 	}
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void on(BookUpdateEvent event) {
+		Book book = bookRepository.getById(event.getBookId());
+		book.setAuthor(event.getAuthor());
+		book.setIsReady(event.getIsReady());
+		book.setName(event.getName());
+		bookRepository.save(book);
+	}
+	
+	@EventHandler
+	public void on(BookDeleteEvent event) {
+		bookRepository.deleteById(event.getBookId());
+	}
 }
