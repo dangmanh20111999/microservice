@@ -12,9 +12,9 @@ public class CreateEmployeeCommand {
 	private String firstName;
 	private String lastName;
 	private String kin;
-	private boolean isDisciplined;
+	private Boolean isDisciplined;
 	public CreateEmployeeCommand(String employeeId, String firstName, String lastName, String kin,
-			boolean isDisciplined) {
+			Boolean isDisciplined) {
 		super();
 		this.employeeId = employeeId;
 		this.firstName = firstName;

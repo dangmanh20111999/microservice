@@ -12,7 +12,7 @@ public class DeleteEmployeeCommand {
 	private String firstName;
 	private String lastName;
 	private String kin;
-	private boolean isDisciplined;
+	private Boolean isDisciplined;
 	public DeleteEmployeeCommand(String employeeId) {
 		super();
 		this.employeeId = employeeId;

@@ -9,5 +9,5 @@ public class EmployeeCreateEvent {
 	private String firstName;
 	private String lastName;
 	private String kin;
-	private boolean isDisciplined;
+	private Boolean isDisciplined;
 }
