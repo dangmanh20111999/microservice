@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.manhnd.employeeservice.command.data.Employee;
 import com.manhnd.employeeservice.command.data.EmployeeRepository;
-import com.manhnd.employeeservice.query.model.EmployeeResponseCommonModel;
 import com.manhnd.employeeservice.query.model.EmployeeResponseModel;
 import com.manhnd.employeeservice.query.queries.GetAllEmployeeQuery;
 import com.manhnd.employeeservice.query.queries.GetDetailsEmployeeQuery;
@@ -22,17 +21,19 @@ public class EmployeeProjection {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
+	@SuppressWarnings("deprecation")
 	@QueryHandler
 	public EmployeeResponseModel handle(GetEmployeesQuery getEmployeeQuery) {
 		EmployeeResponseModel model = new EmployeeResponseModel();
 		Employee employee = employeeRepository.getById(getEmployeeQuery.getEmployeeId());
-		BeanUtils.copyProperties(model, employee);
+		BeanUtils.copyProperties(employee, model);
 		return model;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@QueryHandler
-	public EmployeeResponseCommonModel handle(GetDetailsEmployeeQuery getDetailsEmployeeQuery) {
-		EmployeeResponseCommonModel model = new EmployeeResponseCommonModel();
+	public EmployeeResponseModel handle(GetDetailsEmployeeQuery getDetailsEmployeeQuery) {
+		EmployeeResponseModel model = new EmployeeResponseModel();
 		Employee employee = employeeRepository.getById(getDetailsEmployeeQuery.getEmployeeId());
 		BeanUtils.copyProperties(model, employee);
 		return model;

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manhnd.employeeservice.query.model.BookResponseCommonModel;
 import com.manhnd.employeeservice.query.model.EmployeeResponseModel;
+import com.manhnd.employeeservice.query.queries.GetAllEmployeeQuery;
 import com.manhnd.employeeservice.query.queries.GetEmployeesQuery;
 
 @RestController
@@ -31,12 +31,7 @@ public class EmployeeQueryController {
 	
 	@GetMapping
 	public List<EmployeeResponseModel> getAllEmployee() {
-		List<EmployeeResponseModel> list = queryGateway.query(new EmployeeResponseModel(), ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
+		List<EmployeeResponseModel> list = queryGateway.query(new GetAllEmployeeQuery(), ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
 		return list;
 	}
-	
-//	@GetMapping("/{employeeId}/books")
-//	public List<BookResponseCommonModel> getEmployeeBrrowedBook(@PathVariable String employeeId) {
-//		
-//	}
 }
