@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.config;
+package com.manhnd.userservice.config;
 
 import java.io.IOException;
 
@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.manhnd.apigateway.service.JwtUserDetailsService;
-import com.manhnd.apigateway.util.JwtTokenUtil;
+import com.manhnd.userservice.service.JwtUserDetailsService;
+import com.manhnd.userservice.util.JwtTokenUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 @Component

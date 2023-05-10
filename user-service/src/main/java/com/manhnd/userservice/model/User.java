@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.model;
+package com.manhnd.userservice.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

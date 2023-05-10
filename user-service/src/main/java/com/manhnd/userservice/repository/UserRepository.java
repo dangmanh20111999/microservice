@@ -1,9 +1,10 @@
-package com.manhnd.apigateway.repository;
+package com.manhnd.userservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.manhnd.apigateway.model.User;
+import com.manhnd.userservice.model.User;
+
 
 public interface UserRepository extends JpaRepository<User, Long>{
 

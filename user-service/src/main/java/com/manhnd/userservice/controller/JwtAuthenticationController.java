@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.controller;
+package com.manhnd.userservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +9,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manhnd.apigateway.model.JwtRequest;
-import com.manhnd.apigateway.model.JwtResponse;
-import com.manhnd.apigateway.model.User;
-import com.manhnd.apigateway.util.JwtTokenUtil;
+import com.manhnd.userservice.model.JwtRequest;
+import com.manhnd.userservice.model.JwtResponse;
+import com.manhnd.userservice.model.User;
+import com.manhnd.userservice.util.JwtTokenUtil;
+
 
 
 
 @RestController
+@RequestMapping("/api/v1/users")
 public class JwtAuthenticationController {
 
 	@Autowired

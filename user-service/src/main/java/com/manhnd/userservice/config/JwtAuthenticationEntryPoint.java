@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.config;
+package com.manhnd.userservice.config;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.model;
+package com.manhnd.userservice.model;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 

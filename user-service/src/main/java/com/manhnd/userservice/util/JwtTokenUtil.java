@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.util;
+package com.manhnd.userservice.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.manhnd.apigateway.model.User;
+import com.manhnd.userservice.model.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

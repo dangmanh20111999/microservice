@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.service;
+package com.manhnd.userservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,8 +7,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.manhnd.apigateway.model.User;
-import com.manhnd.apigateway.repository.UserRepository;
+import com.manhnd.userservice.model.User;
+import com.manhnd.userservice.repository.UserRepository;
+
 @Service
 public class JwtUserDetailsService implements UserDetailsService{
 

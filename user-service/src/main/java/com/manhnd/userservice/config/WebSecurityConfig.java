@@ -1,4 +1,4 @@
-package com.manhnd.apigateway.config;
+package com.manhnd.userservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -52,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests() 
-			.antMatchers("/authenticate").permitAll()
+			.antMatchers("/api/v1/users/authenticate").permitAll()
 			.antMatchers(HttpMethod.GET, "/contact/**").access("hasAnyAuthority('JWT_USER','JWT_ADMIN')")
 			.antMatchers("/admin/**").access("hasAuthority('JWT_ADMIN')")
 			.anyRequest().authenticated().and()
