@@ -1,18 +1,24 @@
 package com.manhnd.apigateway.config;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
 import com.google.common.net.HttpHeaders;
 
+import reactor.core.publisher.Flux;
 @Component
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config>{
+	
+	public static String SECRET = "-DKPHCeMooWiW6Gn2cfZpHT5MB-50PSBdUEUAfl_L0G2yywqq-IaCat4B3aNoJL7qz6Ng1kdfvP-QrOVg2ezYg";
 
 	 public static class Config {
 	        // empty class as I don't need any particular configuration
@@ -25,23 +31,56 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config>{
 	public GatewayFilter apply(Config config) {
 		return (exchange, chain) -> {
 			  if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                throw new RuntimeException("Missing authorization information");
+				  exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+				  byte[] bytes = "Authorization header is missing in request".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
             }
 
             String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-
+            
             String[] parts = authHeader.split(" ");
-
             if (parts.length != 2 || !"Bearer".equals(parts[0])) {
-                throw new RuntimeException("Incorrect authorization structure");
+            	exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+				  byte[] bytes = "Authorization header is missing in request".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
             }
-         
-            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-    		JWTVerifier verifier = JWT.require(algorithm).build();
-    		DecodedJWT decodedJWT = verifier.verify(parts[1]);
-    		String username = decodedJWT.getSubject();
+            String[] split_string = parts[1].split("\\.");
+            if (split_string.length < 2) {
+            	exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+				  byte[] bytes = "Index 1 out of bounds for length 1".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
+            }
+            String base64EncodedBody = split_string[1];
+            
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+            String payload = new String(decoder.decode(base64EncodedBody));
+            JSONObject json = null;
+			try {
+				json = new JSONObject(payload);
+			} catch (JSONException e) {
+				exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+				  byte[] bytes = "Authorization header is missing in request".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
+			}  
+
+    		String username = null;
+			try {
+				username = json.getString("sub");
+			} catch (JSONException e) {
+				exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+				  byte[] bytes = "Token Error when get Username".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
+			}
          if(username == "" || username == null) {
-      	   throw new RuntimeException("Athorization error");
+        	 exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+			  byte[] bytes = "Username does not exist".getBytes(StandardCharsets.UTF_8);
+			  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+			  return exchange.getResponse().writeWith(Flux.just(buffer));
          }
       	   ServerHttpRequest request = exchange.getRequest().mutate().
       	      header("X-auth-username", username).
@@ -49,5 +88,4 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config>{
       	      return chain.filter(exchange.mutate().request(request).build());
 		  };
 	}
-
 }

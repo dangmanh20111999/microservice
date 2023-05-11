@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.auth0.jwt.JWT;
 import com.manhnd.userservice.model.User;
 
 import io.jsonwebtoken.Claims;
@@ -13,8 +14,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil {
 
-	private static final long JWT_TOKEN_VALIDITY = 24*60*60;
-	public static final String SECRET = "mysecret";
+	private static final long JWT_TOKEN_VALIDITY = 24*60;
+	public static final String SECRET = "-DKPHCeMooWiW6Gn2cfZpHT5MB-50PSBdUEUAfl_L0G2yywqq-IaCat4B3aNoJL7qz6Ng1kdfvP-QrOVg2ezYg";
 	private String token = null;
 	
 	public JwtTokenUtil(String jwtToken) {
@@ -77,7 +78,7 @@ public class JwtTokenUtil {
 		long issueAtDate = now + (JWT_TOKEN_VALIDITY);
 		Date expireDate = new Date(expireTime);
 		Date issueAt = new Date(issueAtDate);
-		 
+
 		return Jwts.builder()
 				.setClaims(claims)
 				.setSubject(subject)
@@ -85,7 +86,7 @@ public class JwtTokenUtil {
 				.setExpiration(expireDate)
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
 	}
-
+	
 	
 	public Boolean validateToken(UserDetails userDetails) {
 		final String username = getUsernameFromToken();
