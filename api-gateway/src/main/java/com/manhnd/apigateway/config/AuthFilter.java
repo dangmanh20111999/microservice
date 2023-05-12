@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.net.HttpHeaders;
 
 import reactor.core.publisher.Flux;
@@ -38,25 +40,42 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config>{
             }
 
             String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            
+//            
             String[] parts = authHeader.split(" ");
-            if (parts.length != 2 || !"Bearer".equals(parts[0])) {
-            	exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-				  byte[] bytes = "Authorization header is missing in request".getBytes(StandardCharsets.UTF_8);
-				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
-				  return exchange.getResponse().writeWith(Flux.just(buffer));
-            }
             String[] split_string = parts[1].split("\\.");
-            if (split_string.length < 2) {
+//            if (parts.length != 2 || !"Bearer".equals(parts[0])) {
+//            	exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//				  byte[] bytes = "Authorization header is missing in request".getBytes(StandardCharsets.UTF_8);
+//				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+//				  return exchange.getResponse().writeWith(Flux.just(buffer));
+//            }
+            if (split_string.length < 3) {
             	exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-				  byte[] bytes = "Index 1 out of bounds for length 1".getBytes(StandardCharsets.UTF_8);
+				  byte[] bytes = "Invalid Token! ".getBytes(StandardCharsets.UTF_8);
 				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
 				  return exchange.getResponse().writeWith(Flux.just(buffer));
             }
-            String base64EncodedBody = split_string[1];
+            DecodedJWT jwt = null;
+            try {
+            	 jwt = JWT.decode(authHeader.substring(7));
+            }catch(Exception ex) {
+            	  exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            	  byte[] bytes = "Token does not exist !".getBytes(StandardCharsets.UTF_8);
+				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+				  return exchange.getResponse().writeWith(Flux.just(buffer));
+            }
             
+            String getPayLoad = jwt.getPayload();
+//            String[] split_string = parts[1].split("\\.");
+//            if (split_string.length < 2) {
+//            	exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+//				  byte[] bytes = "Index 1 out of bounds for length 1".getBytes(StandardCharsets.UTF_8);
+//				  DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+//				  return exchange.getResponse().writeWith(Flux.just(buffer));
+//            }
+           
             Base64.Decoder decoder = Base64.getUrlDecoder();
-            String payload = new String(decoder.decode(base64EncodedBody));
+            String payload = new String(decoder.decode(getPayLoad));
             JSONObject json = null;
 			try {
 				json = new JSONObject(payload);

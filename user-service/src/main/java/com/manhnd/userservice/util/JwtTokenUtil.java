@@ -1,4 +1,5 @@
 package com.manhnd.userservice.util;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,9 +65,10 @@ public class JwtTokenUtil {
 	
 	private static Map<String, Object> addClaims(User user) {
 		Map<String, Object> claims = new HashMap<String, Object>();
-		
 		claims.put("id", user.getIdstudent());
-		
+		claims.put("email", user.getEmail());
+		claims.put("phone", user.getPhonenumber());
+		claims.put("address", user.getAddress());
 		return claims;
 	}	
 

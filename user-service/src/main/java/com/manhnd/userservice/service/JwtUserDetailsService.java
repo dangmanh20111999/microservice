@@ -27,7 +27,8 @@ public class JwtUserDetailsService implements UserDetailsService{
 			return null;
 		}
 		else {
-				users.setIdstudent(user.getFirstname());
+				users.setIdstudent(user.getIdstudent());
+				users.setFirstname(user.getFirstname());
 				users.setLastname(user.getLastname());
 				users.setEmail(user.getEmail());
 				users.setAuthoritynames(user.getAuthoritynames());
