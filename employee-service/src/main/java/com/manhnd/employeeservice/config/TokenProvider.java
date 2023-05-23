@@ -29,53 +29,53 @@ import io.jsonwebtoken.UnsupportedJwtException;
 public class TokenProvider {
 
     private String jwtSecret = "-DKPHCeMooWiW6Gn2cfZpHT5MB-50PSBdUEUAfl_L0G2yywqq-IaCat4B3aNoJL7qz6Ng1kdfvP-QrOVg2ezYg";
+//
+//    private long jwtExpirationMs = 24*60;
+//    private static final String AUTHORITIES_KEY = "auth";
 
-    private long jwtExpirationMs = 24*60;
-    private static final String AUTHORITIES_KEY = "auth";
-
-    public String generateToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
-
-        return Jwts.builder()
-                .setSubject(userPrincipal.getName())
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
-
-    public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return Long.parseLong(claims.getSubject());
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException ex) {
-            // Invalid JWT signature
-        } catch (MalformedJwtException ex) {
-            // Invalid JWT token
-        } catch (ExpiredJwtException ex) {
-            // Expired JWT token
-        } catch (UnsupportedJwtException ex) {
-            // Unsupported JWT token
-        } catch (IllegalArgumentException ex) {
-            // JWT claims string is empty
-        }
-        return false;
-    }
+//    public String generateToken(Authentication authentication) {
+//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+//
+//        Date now = new Date();
+//        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
+//
+//        return Jwts.builder()
+//                .setSubject(userPrincipal.getName())
+//                .setIssuedAt(new Date())
+//                .setExpiration(expiryDate)
+//                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+//                .compact();
+//    }
+//
+//    public Long getUserIdFromToken(String token) {
+//        Claims claims = Jwts.parser()
+//                .setSigningKey(jwtSecret)
+//                .parseClaimsJws(token)
+//                .getBody();
+//
+//        return Long.parseLong(claims.getSubject());
+//    }
+//
+//    public boolean validateToken(String token) {
+//        try {
+//            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+//            return true;
+//        } catch (SignatureException ex) {
+//            // Invalid JWT signature
+//        } catch (MalformedJwtException ex) {
+//            // Invalid JWT token
+//        } catch (ExpiredJwtException ex) {
+//            // Expired JWT token
+//        } catch (UnsupportedJwtException ex) {
+//            // Unsupported JWT token
+//        } catch (IllegalArgumentException ex) {
+//            // JWT claims string is empty
+//        }
+//        return false;
+//    }
 
     public Authentication getAuthentication(String token) {
-        if (StringUtils.isEmpty(token) || !validateToken(token)) {
+        if (StringUtils.isEmpty(token)) {
             throw new BadCredentialsException("Invalid token");
         }
 
