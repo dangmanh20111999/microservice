@@ -4,20 +4,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
-			.csrf().disable()
-			.authorizeRequests() 
-			.antMatchers("/api/v1/employees/**").access("hasAnyAuthority('JWT_USER')")
-//			.antMatchers(HttpMethod.GET, "/contact/**").access("hasAnyAuthority('JWT_USER','JWT_ADMIN')")
-//			.antMatchers("/admin/**").access("hasAuthority('JWT_ADMIN')")
-			.anyRequest().authenticated().and()
-			.httpBasic();
-	}
+    private final TokenProvider tokenProvider;
+
+    public SecurityConfig(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/api/v1/employees/**").access("hasAuthority('JWT_USER')") // Các yêu cầu vào "/api/public/**" không yêu cầu xác thực
+            .anyRequest().authenticated() // Các yêu cầu khác yêu cầu xác thực
+            .and()
+            .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class); // Thêm JwtTokenFilter trước UsernamePasswordAuthenticationFilter
+    }
 }

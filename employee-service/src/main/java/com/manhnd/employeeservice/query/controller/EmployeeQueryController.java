@@ -7,6 +7,7 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,5 +34,10 @@ public class EmployeeQueryController {
 	public List<EmployeeResponseModel> getAllEmployee() {
 		List<EmployeeResponseModel> list = queryGateway.query(new GetAllEmployeeQuery(), ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
 		return list;
+	}
+	
+	@GetMapping("/data")
+	public String getData(@RequestHeader("Authorization") String token) {
+		return token;
 	}
 }

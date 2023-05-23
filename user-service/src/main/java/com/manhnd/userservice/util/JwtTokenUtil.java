@@ -69,6 +69,7 @@ public class JwtTokenUtil {
 		claims.put("email", user.getEmail());
 		claims.put("phone", user.getPhonenumber());
 		claims.put("address", user.getAddress());
+		claims.put("role", user.getAuthoritynames());
 		return claims;
 	}	
 
