@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.manhnd</groupId>
-	<artifactId>employee-service</artifactId>
+	<artifactId>employeeservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>employee-service</name>
 	<description>Demo project for Spring Boot</description>
@@ -40,12 +40,6 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.axonframework/axon-spring -->
-		<dependency>
-		    <groupId>org.axonframework</groupId>
-		    <artifactId>axon-spring-boot-starter</artifactId>
-		    <version>4.5.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -80,9 +74,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

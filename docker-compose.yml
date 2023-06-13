@@ -1,0 +1,40 @@
+version : '1'
+services:
+  discoveryService:
+    build:
+      context: discovery-server
+      dockerfile: Dockerfile
+    image: discoveryservice:0.0.1
+    ports:
+      - 8761:8761
+    volumes:
+      - M:\program\Project\microservice\:/microservice/
+  userService:
+    build:
+      context: user-service
+      dockerfile: Dockerfile
+    image: userservice:0.0.1
+    ports:
+      - 9004:9004
+    volumes:
+      - M:\program\Project\microservice\:/microservice/
+  authService:
+    build:
+      context: api-gateway
+      dockerfile: Dockerfile
+    image: authservice:0.0.1
+    ports:
+      - 9000:9000
+    volumes:
+      - M:\program\Project\microservice\:/microservice/
+  employeeService:
+    build:
+      context: employee-service
+      dockerfile: Dockerfile
+    image: employeeservice:0.0.1
+    ports:
+      - 9001:9001
+    volumes:
+      - M:\program\Project\microservice\:/microservice/
+  
+      

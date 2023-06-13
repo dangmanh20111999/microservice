@@ -1,4 +1,4 @@
-package com.manhnd.employeeservice.command.data;
+package com.manhnd.employeeservice.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,11 +12,8 @@ import lombok.Data;
 public class Employee {
 
 	@Id
-	private String employeeId;
-	private String firstName;
-	private String lastName;
-	private String kin;
-	private boolean isDisciplined;
-	
-	
+	private String ids;
+	private String name;
+	private int old;
+	private String address;
 }
