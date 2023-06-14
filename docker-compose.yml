@@ -5,6 +5,9 @@ services:
       context: discovery-server
       dockerfile: Dockerfile
     image: discoveryservice:0.0.1
+    restart: always
+    networks:
+      - share-network
     ports:
       - 8761:8761
     volumes:
@@ -14,6 +17,11 @@ services:
       context: user-service
       dockerfile: Dockerfile
     image: userservice:0.0.1
+    restart: always
+    networks:
+      - share-network
+    depends_on:
+      - discoveryService
     ports:
       - 9004:9004
     volumes:
@@ -23,6 +31,11 @@ services:
       context: api-gateway
       dockerfile: Dockerfile
     image: authservice:0.0.1
+    restart: always
+    networks:
+      - share-network
+    depends_on:
+      - discoveryService
     ports:
       - 9000:9000
     volumes:
@@ -32,9 +45,16 @@ services:
       context: employee-service
       dockerfile: Dockerfile
     image: employeeservice:0.0.1
+    restart: always
+    networks:
+      - share-network
+    depends_on:
+      - discoveryService
     ports:
       - 9001:9001
     volumes:
       - M:\program\Project\microservice\:/microservice/
-  
+networks:
+  share-network:
+    driver: bridge  
       
