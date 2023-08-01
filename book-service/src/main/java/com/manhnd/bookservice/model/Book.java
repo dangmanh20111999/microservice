@@ -1,23 +1,29 @@
-package com.manhnd.bookservice.command.data;
+package com.manhnd.bookservice.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "books")
+import lombok.Data;
+
 @Entity
+@Table(name = "books")
+@Data
 public class Book {
 
 	@Id
-	private String bookId;
+	@Column(name="ids", nullable = false, unique = true)
+	private String ids;
 	private String name;
 	private String author;
-	private Boolean isReady;
-	public String getBookId() {
-		return bookId;
+	
+	
+	public String getIds() {
+		return ids;
 	}
-	public void setBookId(String bookId) {
-		this.bookId = bookId;
+	public void setIds(String ids) {
+		this.ids = ids;
 	}
 	public String getName() {
 		return name;
@@ -31,13 +37,5 @@ public class Book {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public Boolean getIsReady() {
-		return isReady;
-	}
-	public void setIsReady(Boolean isReady) {
-		this.isReady = isReady;
-	}
-	
-	
-	
+
 }
