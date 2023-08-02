@@ -1,10 +1,8 @@
 package com.manhnd.bookservice.service;
 
-import java.util.List;
-
-import com.manhnd.bookservice.model.Book;
+import com.manhnd.bookservice.response.ResultResponse;
 
 public interface BookService {
 
-	List<Book> getAllBooks();
+	ResultResponse getAllBooks();
 }

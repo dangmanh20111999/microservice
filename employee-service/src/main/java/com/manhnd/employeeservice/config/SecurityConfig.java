@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/v1/employees/**").access("hasAuthority('JWT_USER')") // Các yêu cầu vào "/api/public/**" không yêu cầu xác thực
+            .antMatchers("/api/v1/employees/**").access("hasAuthority('JWT_ADMIN')") // Các yêu cầu vào "/api/public/**" không yêu cầu xác thực
             .anyRequest().authenticated() // Các yêu cầu khác yêu cầu xác thực
             .and()
             .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class); // Thêm JwtTokenFilter trước UsernamePasswordAuthenticationFilter

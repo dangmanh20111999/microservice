@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.manhnd.bookservice.response.ResultResponse;
 import com.manhnd.bookservice.service.BookService;
 
 @RestController
@@ -16,7 +17,9 @@ public class BookController {
 	private BookService bookService;
 	
 	@GetMapping("/getAllBooks")
-	public ResponseEntity<?> getAllBooks() {
-		return ResponseEntity.ok().body(bookService.getAllBooks());
+	public ResponseEntity<ResultResponse> getAllBooks() {
+		ResultResponse response = new ResultResponse();
+		response = bookService.getAllBooks();
+		return ResponseEntity.ok().body(response);
 	}
 }
