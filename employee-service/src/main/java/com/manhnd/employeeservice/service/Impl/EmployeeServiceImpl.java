@@ -38,4 +38,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return resultData; 
 	}
 
+	@Override
+	public BookEmpResponse getEmployeeById(String id) {
+		ResultResponse response = restTemplate.getForObject(env.getProperty("bookService.getBookById"), ResultResponse.class, id);
+		List<BookDTO> listBooks = new ArrayList<BookDTO>();
+		listBooks = Convertor.objectMapperConvertStringToList(response.getData().toString(), BookDTO[].class);
+		BookEmpResponse resultData = new BookEmpResponse();
+		resultData.setBookDto(listBooks);
+		resultData.setEmployeeDto(employeeRepo.getEmployeeById(id));
+		return resultData;
+	}
+
 }

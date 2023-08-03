@@ -27,4 +27,18 @@ public class BookServiceImpl implements BookService{
 		return result;
 	}
 
+	@Override
+	public ResultResponse getBookById(String id) {
+		ResultResponse result = new ResultResponse();
+		try {
+			result.setData(Convertor.objectMapperConvertObjectToString(bookRepo.getBookById(id)));
+			result.setCode("00");
+			result.setMessage("SS");
+			result.setTotal(bookRepo.getAllBooks().size());
+		}catch (Exception ex) {
+			
+		}
+		return result;
+	}
+
 }
