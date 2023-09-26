@@ -30,7 +30,8 @@ public class User implements UserDetails {
 	private String authoritynames;
 	private String username;
 	private String address;
-	
+	private String accesstoken;
+
 	@JsonIgnore
 	private String password;	
 	
@@ -72,6 +73,12 @@ public class User implements UserDetails {
 
 	
 	
+	public String getAccesstoken() {
+		return accesstoken;
+	}
+	public void setAccesstoken(String accesstoken) {
+		this.accesstoken = accesstoken;
+	}
 	public String getIdstudent() {
 		return ids;
 	}

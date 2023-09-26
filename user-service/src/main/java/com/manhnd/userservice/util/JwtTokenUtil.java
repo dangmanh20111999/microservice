@@ -99,4 +99,12 @@ public class JwtTokenUtil {
 	public Boolean validateToken() {
 		return (!isTokenExpired());
 	}
+	
+	public String doGenarateRefreshToken() {
+		
+		String refreshToken = null;
+		
+		return refreshToken;
+		
+	}
 }

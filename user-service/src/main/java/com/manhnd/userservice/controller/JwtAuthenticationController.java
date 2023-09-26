@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.manhnd.userservice.model.JwtRequest;
 import com.manhnd.userservice.model.JwtResponse;
 import com.manhnd.userservice.model.User;
+import com.manhnd.userservice.service.UserService;
 import com.manhnd.userservice.util.JwtTokenUtil;
 
 
@@ -27,14 +28,20 @@ public class JwtAuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private UserService userService;
+	
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		final User user = authenticate(authenticationRequest);
-		final String token = JwtTokenUtil.generateToken(user);		
+		final String token = JwtTokenUtil.generateToken(user);
+		if (token != null) {
+			userService.saveTokenWithUserName(user.getUsername(), token);
+		}
 		
 		return ResponseEntity.ok(new JwtResponse(token, user));
 	}
-
+	
 	
 	private User authenticate(JwtRequest request) throws Exception {
 		User user = null;
