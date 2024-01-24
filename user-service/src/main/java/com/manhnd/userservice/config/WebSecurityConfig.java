@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests() 
-			.antMatchers("/api/v1/users/authenticate").permitAll()
+			.antMatchers("/api/v1/users/authenticate").permitAll().antMatchers("/api/v1/users/refreshtoken").permitAll()
 			.antMatchers(HttpMethod.GET, "/contact/**").access("hasAnyAuthority('JWT_USER','JWT_ADMIN')")
 			.antMatchers("/admin/**").access("hasAuthority('JWT_ADMIN')")
 			.anyRequest().authenticated().and()

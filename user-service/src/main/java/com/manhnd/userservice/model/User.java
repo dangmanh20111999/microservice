@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table (name = "users")
 @Entity
+@Data
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 3592549577903104696L;
@@ -30,7 +32,7 @@ public class User implements UserDetails {
 	private String authoritynames;
 	private String username;
 	private String address;
-	private String accesstoken;
+//	private String refreshtoken;
 
 	@JsonIgnore
 	private String password;	
@@ -71,20 +73,6 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
-	
-	
-	public String getAccesstoken() {
-		return accesstoken;
-	}
-	public void setAccesstoken(String accesstoken) {
-		this.accesstoken = accesstoken;
-	}
-	public String getIdstudent() {
-		return ids;
-	}
-	public void setIdstudent(String ids) {
-		this.ids = ids;
-	}
 	public String getFirstname() {
 		return firstname;
 	}

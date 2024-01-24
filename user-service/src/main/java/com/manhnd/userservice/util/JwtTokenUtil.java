@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.auth0.jwt.JWT;
@@ -13,9 +14,24 @@ import com.manhnd.userservice.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Component
 public class JwtTokenUtil {
 
 	private static final long JWT_TOKEN_VALIDITY = 24*60*60;
+
+//	@Value("${JWT_TOKEN_VALIDITY}")
+//	private long JWT_TOKEN_VALIDITY;
+
+//	@Value("${SECRET_KEY}")
+//	private String SECRET;
+
+	public JwtTokenUtil() {
+
+	}
+
 	public static final String SECRET = "-DKPHCeMooWiW6Gn2cfZpHT5MB-50PSBdUEUAfl_L0G2yywqq-IaCat4B3aNoJL7qz6Ng1kdfvP-QrOVg2ezYg";
 	private String token = null;
 	
@@ -57,7 +73,7 @@ public class JwtTokenUtil {
 	}
 
 	
-	public static String generateToken(User user) {
+	public String generateToken(User user) {
 		Map<String, Object> claims = addClaims(user); 
 		return doGenerateToken(claims, user.getUsername());
 	}
@@ -65,7 +81,7 @@ public class JwtTokenUtil {
 	
 	private static Map<String, Object> addClaims(User user) {
 		Map<String, Object> claims = new HashMap<String, Object>();
-		claims.put("id", user.getIdstudent());
+		claims.put("id", user.getIds());
 		claims.put("email", user.getEmail());
 		claims.put("phone", user.getPhonenumber());
 		claims.put("address", user.getAddress());
@@ -74,7 +90,7 @@ public class JwtTokenUtil {
 	}	
 
 	
-	private static String doGenerateToken(Map<String, Object> claims, String subject) {
+	private  String doGenerateToken(Map<String, Object> claims, String subject) {
 		
 		long now = new Date().getTime();
 		long expireTime = now + (JWT_TOKEN_VALIDITY * 1000);
@@ -99,12 +115,13 @@ public class JwtTokenUtil {
 	public Boolean validateToken() {
 		return (!isTokenExpired());
 	}
-	
-	public String doGenarateRefreshToken() {
-		
-		String refreshToken = null;
-		
-		return refreshToken;
-		
+
+	public  String doGenerateRefreshToken(String username) {
+		long now = new Date().getTime();
+		long jwtExpirationMs = now + (JWT_TOKEN_VALIDITY * 1000 + 300000);
+
+		return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, SECRET)
+				.compact();
 	}
 }

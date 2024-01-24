@@ -22,11 +22,11 @@ public class UserServiceImpl implements UserService{
 //		return false;
 //	}
 
-	@Override
-	public void saveTokenWithUserName(String username, String token) {
-		User _user = userRepo.findByUsername(username);
-		_user.setAccesstoken(token);
-		userRepo.save(_user);
-	}
+//	@Override
+//	public void saveTokenWithUserName(String username, String token) {
+//		User _user = userRepo.findByUsername(username);
+//		_user.setAccesstoken(token);
+//		userRepo.save(_user);
+//	}
 
 }

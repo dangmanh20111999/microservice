@@ -27,7 +27,7 @@ public class JwtUserDetailsService implements UserDetailsService{
 			return null;
 		}
 		else {
-				users.setIdstudent(user.getIdstudent());
+				users.setIds(user.getIds());
 				users.setFirstname(user.getFirstname());
 				users.setLastname(user.getLastname());
 				users.setEmail(user.getEmail());
@@ -35,6 +35,8 @@ public class JwtUserDetailsService implements UserDetailsService{
 				users.setPhonenumber(user.getPhonenumber());
 				users.setUsername(user.getUsername());
 				users.setAddress(user.getAddress());
+//				users.setAccesstoken(user.getAccesstoken());
+//				users.setRefreshtoken(user.getRefreshtoken());
 				users.setPassword(encoder.encode(user.getPassword()));
 		}
 		

@@ -1,5 +1,12 @@
 package com.manhnd.userservice.controller;
 
+import com.manhnd.userservice.model.*;
+import com.manhnd.userservice.request.JwtRequest;
+import com.manhnd.userservice.request.TokenRefreshRequest;
+import com.manhnd.userservice.response.JwtResponse;
+import com.manhnd.userservice.response.TokenRefreshResponse;
+import com.manhnd.userservice.service.impl.RefreshTokenServiceImpl;
+import com.manhnd.userservice.util.TokenRefreshException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,13 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manhnd.userservice.model.JwtRequest;
-import com.manhnd.userservice.model.JwtResponse;
-import com.manhnd.userservice.model.User;
 import com.manhnd.userservice.service.UserService;
 import com.manhnd.userservice.util.JwtTokenUtil;
-
-
 
 
 @RestController
@@ -30,16 +32,24 @@ public class JwtAuthenticationController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+
+	@Autowired
+	private RefreshTokenServiceImpl refreshTokenService;
 	
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		final User user = authenticate(authenticationRequest);
-		final String token = JwtTokenUtil.generateToken(user);
+		final String token = jwtTokenUtil.generateToken(user);
+		RefreshToken refreshToken = null;
 		if (token != null) {
-			userService.saveTokenWithUserName(user.getUsername(), token);
+//			userService.saveTokenWithUserName(user.getUsername(), token);
+			refreshToken =refreshTokenService.createRefreshToken(user.getIds());
 		}
 		
-		return ResponseEntity.ok(new JwtResponse(token, user));
+		return ResponseEntity.ok(new JwtResponse(refreshToken.getToken(), token));
 	}
 	
 	
@@ -56,5 +66,19 @@ public class JwtAuthenticationController {
 		}
 		
 		return user;
+	}
+
+	@PostMapping(value = "/refreshtoken")
+	public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequest request) {
+		String requestRefreshToken = request.getRefreshToken();
+		return refreshTokenService.findByToken(requestRefreshToken)
+				.map(refreshTokenService::verifyExpiration)
+				.map(RefreshToken::getUser)
+				.map(user -> {
+					String token = jwtTokenUtil.doGenerateRefreshToken(user.getUsername());
+					return ResponseEntity.ok(new TokenRefreshResponse(requestRefreshToken,token));
+				})
+				.orElseThrow(() ->
+					new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
 	}
 }
