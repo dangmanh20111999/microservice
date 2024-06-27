@@ -57,4 +57,20 @@ services:
 networks:
   share-network:
     driver: bridge  
-      
+
+
+
+
+version : '1'
+services:
+  app:
+    image: registry.gitlab.com/manhnd992/test:1.0.0
+    restart: always
+    networks:
+      - share-network
+    ports:
+      - 8080:8080
+
+networks:
+  share-network:
+    driver: bridge 

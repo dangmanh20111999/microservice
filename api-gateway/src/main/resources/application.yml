@@ -1,32 +1,9 @@
-server:
-  port: 9000
-  
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: book-service
-          uri: http://10.15.144.42:9002
-          predicates:
-            - Path=/api/v1/books/**
-          filters:
-            - AuthFilter
-        - id: employee-service
-          uri: http://10.15.144.42:9001
-          predicates:
-            - Path=/api/v1/employees/**
-          filters:
-            - AuthFilter     
-        - id: user-service
-          uri: http://10.15.144.42:9004
-          predicates:
-            - Path=/api/v1/users/**
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-              allowedOrigins: "*"
-              allowedMethods: "*"
-              allowedHeaders: "*"
-
+book:
+  service:
+    url: ${BOOK_SERVICE_URL:http://localhost:9002}
+employee:
+  service:
+    url: ${EMPLOYEE_SERVICE_URL:http://localhost:9001}
+user:
+  service:
+    url: ${USER_SERVICE_URL:http://localhost:9004}
